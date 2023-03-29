@@ -10,6 +10,23 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  USER
+  ADMIN
+}
+
 model User {
-  id String @id @default(uuid())
+  id                  String    @id @default(uuid())
+  username            String?
+  email               String    @unique
+  password            String
+  role                Role      @default(USER)
+  isTfaEnabled        Boolean   @default(false)
+  tfaSecret           String?
+  resetPasswordToken  String?   @unique
+  resetPasswordExpire DateTime?
+  confirmEmailToken   String?   @unique
+  isEmailConfirmed    Boolean   @default(false)
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
 }

@@ -12,8 +12,8 @@ async function bootstrap() {
       credentials: true,
     },
   });
-
   const configService = app.get(ConfigService);
+  app.setGlobalPrefix('/api/v1');
 
   app.useGlobalPipes(
     new ValidationPipe({
