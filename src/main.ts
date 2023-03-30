@@ -4,6 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import { ValidationPipe } from '@nestjs/common';
 import * as cookieParser from 'cookie-parser';
 import { PrismaService } from './prisma.service';
+import helmet from 'helmet';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -14,6 +15,8 @@ async function bootstrap() {
   });
   const configService = app.get(ConfigService);
   app.setGlobalPrefix('/api/v1');
+
+  app.use(helmet());
 
   app.useGlobalPipes(
     new ValidationPipe({
