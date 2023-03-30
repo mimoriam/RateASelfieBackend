@@ -29,7 +29,8 @@ import { RefreshTokenDto } from './dto/refresh-token.dto';
 import { ForgotPassDto } from './dto/forgot-pass.dto';
 import { ResetPassDto } from './dto/reset-pass.dto';
 import { UpdatePassDto } from './dto/update-pass.dto';
-import { OtpAuthenticationService } from "./otp-authentication.service";
+import { OtpAuthenticationService } from './otp-authentication.service';
+import { UpdateDetailsDto } from './dto/update-details.dto';
 
 @Injectable({ scope: Scope.REQUEST })
 export class AuthenticationService {
@@ -353,6 +354,34 @@ export class AuthenticationService {
 
     return {
       message: 'Password updated!',
+    };
+  }
+
+  async updateDetails(
+    updateDetailsDto: UpdateDetailsDto,
+    user: ActiveUserData,
+  ) {
+    const user_in_db = await this.prisma.user.findUnique({
+      where: {
+        email: user.email,
+      },
+    });
+
+    if (!user_in_db) {
+      throw new UnauthorizedException();
+    }
+
+    await this.prisma.user.update({
+      where: {
+        email: user.email,
+      },
+      data: {
+        username: updateDetailsDto.username,
+      },
+    });
+
+    return {
+      message: 'Details updated',
     };
   }
 

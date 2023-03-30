@@ -25,6 +25,7 @@ import { UpdatePassDto } from './dto/update-pass.dto';
 import { OtpAuthenticationService } from './otp-authentication.service';
 import { Response } from 'express';
 import { toFileStream } from 'qrcode';
+import { UpdateDetailsDto } from './dto/update-details.dto';
 
 @Controller('auth')
 export class AuthenticationController {
@@ -90,6 +91,15 @@ export class AuthenticationController {
     @ActiveUser() user: ActiveUserData,
   ) {
     return this.authService.updatePass(updatePassDto, user);
+  }
+
+  @Auth(AuthType.Bearer)
+  @Patch('updatedetails')
+  async updateDetails(
+    @Body() updateDetailsDto: UpdateDetailsDto,
+    @ActiveUser() user: ActiveUserData,
+  ) {
+    return this.authService.updateDetails(updateDetailsDto, user);
   }
 
   @Auth(AuthType.Bearer)
